@@ -1,3 +1,4 @@
+
 version: '3.3'
 services:
     portainer-ce:
@@ -10,12 +11,12 @@ services:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - 'portainer_data:/data'
         image: 'portainer/portainer-ce:latest'
-        
+
     wireguard:
         container_name: wireguard
-            cap_add:
-             - NET_ADMIN
-             - SYS_MODULE
+        cap_add:
+            - NET_ADMIN
+            - SYS_MODULE
         environment:
             - PUID=1000
             - PGID=1000
@@ -31,6 +32,38 @@ services:
             - '/lib/modules:/lib/modules'
         restart: unless-stopped
         image: linuxserver/wireguard
-       
+
+    watchtower:
+        container_name: watchtower
+        image: containrrr/watchtower
+        restart: always
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /etc/timezone:/etc/timezone:ro
+        environment:
+            - WATCHTOWER_CLEANUP=true
+              # - WATCHTOWER_LABEL_ENABLE=true
+            - WATCHTOWER_INCLUDE_RESTARTING=true
+              # labels:
+              # - com.centurylinklabs.watchtower.enable=true
+
+    syncthing:
+        image: syncthing/syncthing
+        container_name: syncthing
+        hostname: my-syncthing
+        environment:
+            - PUID=1000
+            - PGID=1000
+        volumes:
+            - /etc/syncthing:/var/syncthing
+            - /dev/disk1/syncthing:/disk1
+        ports:
+            - 8384:8384
+            - 22000:22000/tcp
+            - 22000:20000/udp
+            - 21027:21027/udp
+        restart: unless-stopped
+
+
 volumes:
   portainer_data:
