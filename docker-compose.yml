@@ -30,7 +30,7 @@ services:
         volumes:
             - '/home/pi/wireguard:/config'
             - '/lib/modules:/lib/modules'
-        restart: unless-stopped
+        restart: always
         image: linuxserver/wireguard
 
     watchtower:
@@ -62,7 +62,7 @@ services:
             - 22000:22000/tcp
             - 22000:20000/udp
             - 21027:21027/udp
-        restart: unless-stopped
+        restart: always
 
 
 volumes:
