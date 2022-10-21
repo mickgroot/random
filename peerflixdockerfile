@@ -1,0 +1,7 @@
+# Pull base image.
+FROM node:latest
+
+# Install.
+RUN npm install -g peerflix-server && npm install -g forever && forever start $(which peerflix-server)
+
+CMD ["peerflix-server"]
